@@ -14,8 +14,6 @@
     <artifactId>password-manager</artifactId>
     <version>1.0-SNAPSHOT</version>
 
-    <packaging>war</packaging>
-
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
@@ -32,11 +30,5 @@
             <version>2.8.9</version>
         </dependency>
     </dependencies>
-
-    <build>
-        <finalName>${artifactId}</finalName>
-    </build>
-
-
 
 </project>
