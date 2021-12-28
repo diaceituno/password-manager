@@ -2,7 +2,7 @@ package drive.implementation;
 
 import auth.definition.TokenHolder;
 import drive.definition.BlobDownloader;
-import drive.definition.DriveRequestResult;
+import drive.definition.FileRequestResult;
 import drive.definition.FileResolver;
 import drive.model.DriveFile;
 import org.slf4j.Logger;
@@ -38,26 +38,26 @@ public class PasswordFileDownloader implements BlobDownloader {
     private TokenHolder tokenHolder;
 
     @Override
-    public DriveRequestResult<byte[]> download() {
-        DriveRequestResult resolutionResult = driveFileResolver.resolve(List.of(vaultName));
+    public FileRequestResult<byte[]> download() {
+        FileRequestResult resolutionResult = driveFileResolver.resolve(List.of(vaultName));
         if (resolutionResult.getStatusCode() == 200) {
             return downloadDriveFileContent(resolutionResult);
         }
-        return new DriveRequestResult<byte[]>(resolutionResult.getStatusCode(), resolutionResult.getMessage(), null);
+        return new FileRequestResult<byte[]>(resolutionResult.getStatusCode(), resolutionResult.getMessage(), null);
     }
 
-    private DriveRequestResult<byte[]> downloadDriveFileContent(DriveRequestResult<DriveFile> resolutionResult) {
+    private FileRequestResult<byte[]> downloadDriveFileContent(FileRequestResult<DriveFile> resolutionResult) {
         try {
             HttpURLConnection connection = getConnection(resolutionResult.getData());
             connection.setRequestMethod(HttpMethod.GET.toString());
             connection.setRequestProperty(HttpHeaders.AUTHORIZATION, tokenHolder.getToken());
-            return new DriveRequestResult(//
+            return new FileRequestResult(//
                     connection.getResponseCode(), //
                     connection.getResponseMessage(), //
                     connection.getInputStream().readAllBytes());
         } catch (IOException e) {
             LOGGER.error("Error occurred while attemping to download vault file", e);
-            return new DriveRequestResult(500, e.getMessage(), null);
+            return new FileRequestResult(500, e.getMessage(), null);
         }
     }
 

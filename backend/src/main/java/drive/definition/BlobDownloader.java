@@ -2,5 +2,5 @@ package drive.definition;
 
 public interface BlobDownloader {
 
-    DriveRequestResult<byte[]> download();
+    FileRequestResult<byte[]> download();
 }

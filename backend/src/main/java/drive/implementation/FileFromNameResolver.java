@@ -2,7 +2,7 @@ package drive.implementation;
 
 import auth.definition.TokenHolder;
 import com.google.gson.Gson;
-import drive.definition.DriveRequestResult;
+import drive.definition.FileRequestResult;
 import drive.definition.FileResolver;
 import drive.model.DriveFile;
 import drive.model.ListFilesResponse;
@@ -39,16 +39,16 @@ public class FileFromNameResolver implements FileResolver {
     private TokenHolder tokenHolder;
 
     @Override
-    public DriveRequestResult<DriveFile> resolve(List<String> keys) {
+    public FileRequestResult<DriveFile> resolve(List<String> keys) {
         try {
             DriveFile driveFile = findFile(getFileName(keys));
-            return new DriveRequestResult<>(200, null,driveFile);
+            return new FileRequestResult<>(200, null,driveFile);
         }catch(ResponseStatusException e) {
             LOGGER.error("Could not resolve file",e);
-            return new DriveRequestResult<>(e.getRawStatusCode(), "Vault File not found", null);
+            return new FileRequestResult<>(e.getRawStatusCode(), "Vault File not found", null);
         }catch (IOException e) {
             LOGGER.error("Error occurred while resolving file", e);
-            return new DriveRequestResult<>(500, e.getMessage(), null);
+            return new FileRequestResult<>(500, e.getMessage(), null);
         }
     }
 

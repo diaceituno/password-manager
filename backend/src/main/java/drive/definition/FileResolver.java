@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface FileResolver {
 
-    DriveRequestResult<DriveFile> resolve(List<String> keys);
+    FileRequestResult<DriveFile> resolve(List<String> keys);
 
 }

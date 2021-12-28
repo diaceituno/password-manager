@@ -3,7 +3,7 @@ package drive.implementation;
 import auth.definition.TokenHolder;
 import com.google.gson.JsonObject;
 import drive.definition.BlobUploader;
-import drive.definition.DriveRequestResult;
+import drive.definition.FileRequestResult;
 import drive.definition.FileResolver;
 import drive.model.DriveFile;
 import org.slf4j.Logger;
@@ -60,22 +60,22 @@ public class PasswordFileUploader implements BlobUploader {
     private FileResolver fileResolver;
 
     @Override
-    public DriveRequestResult<Void> upload(byte[] blob) {
+    public FileRequestResult<Void> upload(byte[] blob) {
         try {
             String existingVaultFileId = getExistingVaultFileId();
             String requestBody = buildRequestBody(blob, existingVaultFileId);
             HttpURLConnection connection = getConnection(requestBody.getBytes(StandardCharsets.UTF_8).length, getExistingVaultFileId());
             OutputStream os = connection.getOutputStream();
             os.write(requestBody.getBytes(StandardCharsets.UTF_8));
-            return new DriveRequestResult<>(connection.getResponseCode(), connection.getResponseMessage(), null);
+            return new FileRequestResult<>(connection.getResponseCode(), connection.getResponseMessage(), null);
         } catch (Exception e) {
             LOGGER.error("Error occurred while attempting to upload file", e);
-            return new DriveRequestResult<>(500, e.getMessage(), null);
+            return new FileRequestResult<>(500, e.getMessage(), null);
         }
     }
 
     private String getExistingVaultFileId() {
-        DriveRequestResult<DriveFile> result = fileResolver.resolve(List.of(vaultFileName));
+        FileRequestResult<DriveFile> result = fileResolver.resolve(List.of(vaultFileName));
         if (result.getStatusCode() == 200) {
             return result.getData().getId();
         }

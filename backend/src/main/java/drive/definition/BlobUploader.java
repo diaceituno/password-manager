@@ -2,5 +2,5 @@ package drive.definition;
 
 public interface BlobUploader {
 
-    public DriveRequestResult<Void> upload(byte[] blob);
+    public FileRequestResult<Void> upload(byte[] blob);
 }

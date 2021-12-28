@@ -2,7 +2,7 @@ package api;
 
 import drive.definition.BlobDownloader;
 import drive.definition.BlobUploader;
-import drive.definition.DriveRequestResult;
+import drive.definition.FileRequestResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,7 +23,7 @@ public class BlobEndpoint {
 
     @GetMapping("/")
     public ResponseEntity<String> getBlob() {
-        DriveRequestResult<byte[]> downloadResult = blobDownloader.download();
+        FileRequestResult<byte[]> downloadResult = blobDownloader.download();
         String message = downloadResult.getMessage();
         if (downloadResult.getStatusCode() == 200) {
             message = new String(downloadResult.getData(), StandardCharsets.UTF_8);
@@ -33,7 +33,7 @@ public class BlobEndpoint {
 
     @PostMapping("/")
     public ResponseEntity<String> postBlob(@RequestBody byte[] blob) {
-        DriveRequestResult<Void> uploadResult = blobUploader.upload(blob);
+        FileRequestResult<Void> uploadResult = blobUploader.upload(blob);
         return new ResponseEntity<>(uploadResult.getMessage(),null, uploadResult.getStatusCode());
     }
 }
